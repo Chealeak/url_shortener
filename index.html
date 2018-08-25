@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="style.css">
+	<title>Тестовое задание PHP</title>
+</head>
+<body>
+	<div class="page">
+		<div class="shortener">
+			<h1 class="shortener__title">URL Shortener</h1>
+			<form id="sh-form" class="shortener__form">
+				<input id="sh-url" class="shortener__field" type="text" name="url">
+				<input class="shortener__submit" type="submit" value="Submit">
+			</form>
+			<div id="sh-response" class="shortener__response"></div>
+		</div>
+	</div>
+
+	<script>
+		document.getElementById('sh-form').addEventListener('submit', sendForm);
+
+		var xhr = null;
+		var response = document.getElementById('sh-response');
+
+		function sendForm(e) {
+			e.preventDefault();
+
+			var url = document.getElementById('sh-url').value;
+
+			xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = responseHandler;
+			xhr.open('POST', 'handler.php');
+			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhr.send('url=' + url);
+			response.innerHTML = 'Loading...';
+		}
+
+		function responseHandler() {
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				response.innerHTML = xhr.responseText;
+			} else {
+				response.innerHTML = xhr.status + ': ' + xhr.statusText;
+			}
+		}
+	</script>
+</body>
+</html>
